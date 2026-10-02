@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Protection & CSAE Standards — VahanSathi</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS v3 via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        vahan: {
+                            navy: '#0F172A',
+                            slate: '#1E293B',
+                            border: '#334155',
+                            cyan: '#0284C7',
+                            cyanDark: '#0369A1',
+                            sky: '#38BDF8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Exact VahanSathi Android App Theme Tokens */
+        :root {
+            --bg-page: #F8FAFC;
+            --bg-surface: #FFFFFF;
+            --border-color: #E2E8F0;
+            --text-heading: #0F172A;
+            --text-body: #334155;
+            --text-muted: #64748B;
+            --brand-primary: #0284C7; /* VahanSathi App Cyan */
+            --brand-accent: #0369A1;
+            --badge-bg: #E0F2FE;
+            --badge-text: #0369A1;
+            --code-bg: #F1F5F9;
+            --app-icon-bg: #0F172A;
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0F172A; /* App Dark Background */
+            --bg-surface: #1E293B; /* App Dark Card Background */
+            --border-color: #334155;
+            --text-heading: #F8FAFC;
+            --text-body: #CBD5E1;
+            --text-muted: #94A3B8;
+            --brand-primary: #38BDF8; /* App Electric Cyan */
+            --brand-accent: #7DD3FC;
+            --badge-bg: rgba(56, 189, 248, 0.12);
+            --badge-text: #38BDF8;
+            --code-bg: #0F172A;
+            --app-icon-bg: #38BDF8;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-page);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284C7;
+            border-radius: 4px;
+        }
+        [data-theme="dark"] ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <nav class="sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-colors duration-200" style="background-color: rgba(var(--bg-surface), 0.9); border-color: var(--border-color);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- App Brand Logo matching Splash Screen -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl p-1.5 flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105" style="background-color: var(--app-icon-bg);">
+                    <img src="ic_splashscreen.png" alt="VahanSathi Icon" class="w-full h-full object-contain" />
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg font-extrabold tracking-tight" style="color: var(--text-heading);">VahanSathi</span>
+                        <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded font-bold" style="background-color: var(--badge-bg); color: var(--badge-text);">v2.4</span>
+                    </div>
+                    <span class="text-[11px] font-medium" style="color: var(--text-muted);">Trust & Safety Governance</span>
+                </div>
+            </a>
+
+            <!-- Controls -->
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 text-xs font-mono px-3 py-1.5 rounded-lg border" style="background-color: var(--code-bg); border-color: var(--border-color); color: var(--text-muted);">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>ORG: UK ACADEME</span>
+                </div>
+
+                <!-- Custom Theme Dropdown -->
+                <div class="relative" id="themeDropdown">
+                    <button id="themeBtn" type="button" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold rounded-xl border shadow-sm transition-all duration-200" style="background-color: var(--bg-surface); border-color: var(--border-color); color: var(--text-heading);">
+                        <svg class="w-4 h-4 fill-none stroke-2 stroke-linecap-round stroke-linejoin-round" style="stroke: var(--brand-primary);" id="activeThemeIcon" viewBox="0 0 24 24"></svg>
+                        <span id="activeThemeLabel">Light Theme</span>
+                        <svg class="w-3 h-3 stroke-2 fill-none transition-transform duration-200" style="stroke: var(--text-muted);" id="arrowIcon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+
+                    <div id="themeMenu" class="hidden absolute right-0 mt-2 w-44 rounded-2xl border shadow-2xl p-1.5 space-y-1 z-50 transition-all" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                        <button class="theme-option w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-colors" style="color: var(--text-body);" data-value="light">
+                            <div class="flex items-center gap-2.5">
+                                <svg class="w-4 h-4 fill-none stroke-2 stroke-linecap-round stroke-linejoin-round stroke-current" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                                <span>Light Theme</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 stroke-[3] fill-none check-mark hidden" style="stroke: var(--brand-primary);" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                        <button class="theme-option w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-colors" style="color: var(--text-body);" data-value="dark">
+                            <div class="flex items-center gap-2.5">
+                                <svg class="w-4 h-4 fill-none stroke-2 stroke-linecap-round stroke-linejoin-round stroke-current" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                                <span>Dark Theme</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 stroke-[3] fill-none check-mark hidden" style="stroke: var(--brand-primary);" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                        <button class="theme-option w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition-colors" style="color: var(--text-body);" data-value="auto">
+                            <div class="flex items-center gap-2.5">
+                                <svg class="w-4 h-4 fill-none stroke-2 stroke-linecap-round stroke-linejoin-round stroke-current" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                                <span>System Auto</span>
+                            </div>
+                            <svg class="w-3.5 h-3.5 stroke-[3] fill-none check-mark hidden" style="stroke: var(--brand-primary);" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Hero Banner -->
+    <section class="relative border-b overflow-hidden py-14 px-4 sm:px-6 lg:px-8 transition-colors duration-200" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider border" style="background-color: var(--badge-bg); border-color: var(--border-color); color: var(--badge-text);">
+                    <span class="w-2 h-2 rounded-full" style="background-color: var(--brand-primary);"></span>
+                    Compliance Framework
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold border bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
+                    <svg class="w-3.5 h-3.5 stroke-2 stroke-current fill-none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    Google Play Validated
+                </span>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4" style="color: var(--text-heading);">
+                Child Safety & Protection Standards
+            </h1>
+            <p class="text-base sm:text-lg max-w-3xl leading-relaxed font-normal" style="color: var(--text-muted);">
+                Explicit organizational policy, technical protocols, and enforcement mechanisms maintained by <strong style="color: var(--text-heading);">UK Academe</strong> to safeguard minors against Child Sexual Abuse and Exploitation (CSAE).
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content Layout -->
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Sidebar -->
+            <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+                
+                <!-- Quick Navigation Box -->
+                <div class="rounded-2xl p-5 border shadow-sm space-y-3" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider" style="color: var(--text-muted);">Document Contents</div>
+                    <nav class="space-y-1 text-sm font-semibold">
+                        <a href="#section-1" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors" style="color: var(--text-heading);">
+                            <span>1. Zero Tolerance Policy</span>
+                            <svg class="w-4 h-4 stroke-2 stroke-current fill-none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                        <a href="#section-2" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors" style="color: var(--text-heading);">
+                            <span>2. Prohibited Conduct</span>
+                            <svg class="w-4 h-4 stroke-2 stroke-current fill-none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                        <a href="#section-3" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors" style="color: var(--text-heading);">
+                            <span>3. App Safeguards</span>
+                            <svg class="w-4 h-4 stroke-2 stroke-current fill-none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                        <a href="#section-4" class="flex items-center justify-between p-2.5 rounded-xl hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors" style="color: var(--text-heading);">
+                            <span>4. Law Enforcement Escalation</span>
+                            <svg class="w-4 h-4 stroke-2 stroke-current fill-none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Publisher Registry Box -->
+                <div class="rounded-2xl p-5 border shadow-sm space-y-4" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                    <div class="flex items-center justify-between border-b pb-3" style="border-color: var(--border-color);">
+                        <div class="text-xs font-mono font-bold uppercase" style="color: var(--text-muted);">Publisher Registry</div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded font-bold" style="background-color: var(--badge-bg); color: var(--badge-text);">VERIFIED</span>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <span class="block font-medium" style="color: var(--text-muted);">Application Name</span>
+                            <span class="font-bold text-sm" style="color: var(--text-heading);">VahanSathi (वाहनसाथी)</span>
+                        </div>
+                        <div>
+                            <span class="block font-medium" style="color: var(--text-muted);">Developer Organization</span>
+                            <span class="font-bold text-sm" style="color: var(--text-heading);">UK Academe</span>
+                        </div>
+                        <div>
+                            <span class="block font-medium" style="color: var(--text-muted);">Effective Date</span>
+                            <span class="font-bold text-sm" style="color: var(--text-heading);">September 30, 2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App-Themed Contact Box -->
+                <div class="rounded-2xl p-5 border text-white shadow-xl space-y-3 bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900" style="border-color: var(--border-color);">
+                    <div class="text-xs font-mono uppercase font-bold" style="color: var(--brand-primary);">Safety & Governance Contact</div>
+                    <div class="font-extrabold text-base">UK Academe Support Desk</div>
+                    <p class="text-xs text-slate-300 leading-relaxed">Direct escalation channel for reporting compliance issues or child safety inquiries.</p>
+                    <a href="mailto:contact@ukacademe.com" class="inline-flex items-center gap-2 w-full justify-center py-2.5 px-4 rounded-xl text-white font-extrabold text-xs transition-transform hover:scale-[1.02] shadow-md" style="background-color: var(--brand-primary);">
+                        <svg class="w-4 h-4 stroke-2 stroke-current fill-none" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        <span>contact@ukacademe.com</span>
+                    </a>
+                </div>
+
+            </aside>
+
+            <!-- Main Legal Content Stream -->
+            <main class="lg:col-span-8 space-y-8">
+                
+                <!-- Overview Card -->
+                <div class="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-4" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                    <div class="text-xs font-mono font-bold uppercase tracking-wider" style="color: var(--brand-primary);">Governance Commitment</div>
+                    <p class="text-base sm:text-lg font-semibold leading-relaxed" style="color: var(--text-heading);">
+                        <strong style="color: var(--brand-primary);">VahanSathi</strong> (operated by <strong style="color: var(--text-heading);">UK Academe</strong>) maintains an absolute zero-tolerance policy against Child Sexual Abuse and Exploitation (CSAE), Child Sexual Abuse Material (CSAM), and any form of minor endangerment.
+                    </p>
+                    <p class="text-sm leading-relaxed" style="color: var(--text-body);">
+                        We are strictly committed to enforcing Google Play Developer Program Policies, the Information Technology Act (India), and international legal standards protecting child safety across all mobile services and digital touchpoints.
+                    </p>
+                </div>
+
+                <!-- Section 1 -->
+                <section id="section-1" class="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-4" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                    <div class="flex items-center gap-3">
+                        <!-- Number Circle Fix: Text color set to #FFFFFF (pure white) -->
+                        <span class="w-8 h-8 rounded-xl font-mono font-extrabold text-sm flex items-center justify-center text-white shrink-0" style="background-color: var(--brand-primary); color: #FFFFFF !important;">01</span>
+                        <h2 class="text-xl font-bold" style="color: var(--text-heading);">Statement of Commitment</h2>
+                    </div>
+                    <p class="text-sm leading-relaxed" style="color: var(--text-body);">
+                        Our organization actively works to eliminate online child exploitation. We implement preventive technical safeguards, maintain continuous operational monitoring, and strictly mandate that all features, content updates, and third-party interactions comply with international minor protection standards.
+                    </p>
+                </section>
+
+                <!-- Section 2 -->
+                <section id="section-2" class="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-4" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                    <div class="flex items-center gap-3">
+                        <!-- Number Circle Fix: Text color set to #FFFFFF (pure white) -->
+                        <span class="w-8 h-8 rounded-xl font-mono font-extrabold text-sm flex items-center justify-center text-white shrink-0" style="background-color: var(--brand-primary); color: #FFFFFF !important;">02</span>
+                        <h2 class="text-xl font-bold" style="color: var(--text-heading);">Prohibited Conduct & Content</h2>
+                    </div>
+                    <p class="text-sm" style="color: var(--text-body);">
+                        We strictly prohibit any conduct, media transmission, or user interaction connected to VahanSathi that involves:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="p-4 rounded-xl border space-y-1" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <div class="font-bold text-xs uppercase" style="color: var(--text-heading);">Child Sexual Abuse Material (CSAM)</div>
+                            <div class="text-xs" style="color: var(--text-muted);">Strict prohibition against storing, displaying, or transmitting visual depictions of minor exploitation.</div>
+                        </div>
+                        <div class="p-4 rounded-xl border space-y-1" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <div class="font-bold text-xs uppercase" style="color: var(--text-heading);">Grooming & Luring</div>
+                            <div class="text-xs" style="color: var(--text-muted);">Zero tolerance for contacting, soliciting, or grooming minors for sexually explicit conduct.</div>
+                        </div>
+                        <div class="p-4 rounded-xl border space-y-1" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <div class="font-bold text-xs uppercase" style="color: var(--text-heading);">Sextortion & Blackmail</div>
+                            <div class="text-xs" style="color: var(--text-muted);">Prohibition against coercing, blackmailing, or threatening minors using explicit material.</div>
+                        </div>
+                        <div class="p-4 rounded-xl border space-y-1" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <div class="font-bold text-xs uppercase" style="color: var(--text-heading);">Child Trafficking</div>
+                            <div class="text-xs" style="color: var(--text-muted);">Strict prohibition against advertising, promoting, or facilitating child trafficking networks.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3 -->
+                <section id="section-3" class="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-4" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                    <div class="flex items-center gap-3">
+                        <!-- Number Circle Fix: Text color set to #FFFFFF (pure white) -->
+                        <span class="w-8 h-8 rounded-xl font-mono font-extrabold text-sm flex items-center justify-center text-white shrink-0" style="background-color: var(--brand-primary); color: #FFFFFF !important;">03</span>
+                        <h2 class="text-xl font-bold" style="color: var(--text-heading);">App Architecture & Technical Safeguards</h2>
+                    </div>
+                    <p class="text-sm leading-relaxed" style="color: var(--text-body);">
+                        Although VahanSathi operates primarily as an informative utility application (providing RTO exam practice, traffic sign guides, vehicle information, and process workflows):
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3 p-3.5 rounded-xl border" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <svg class="w-5 h-5 stroke-2 fill-none flex-shrink-0 mt-0.5" style="stroke: var(--brand-primary);" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <div class="text-xs" style="color: var(--text-body);">
+                                <strong style="color: var(--text-heading);">No Unmoderated UGC:</strong> The application does not provide public chat rooms, social feeds, or unmoderated media uploading features where explicit content could be shared.
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 p-3.5 rounded-xl border" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <svg class="w-5 h-5 stroke-2 fill-none flex-shrink-0 mt-0.5" style="stroke: var(--brand-primary);" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <div class="text-xs" style="color: var(--text-body);">
+                                <strong style="color: var(--text-heading);">Minimal Data Collection:</strong> We enforce privacy-first data handling standards to ensure minors using the app for educational prep are completely isolated from unauthorized tracking or contact.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4 -->
+                <section id="section-4" class="rounded-2xl p-6 sm:p-8 border shadow-sm space-y-4" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+                    <div class="flex items-center gap-3">
+                        <!-- Number Circle Fix: Text color set to #FFFFFF (pure white) -->
+                        <span class="w-8 h-8 rounded-xl font-mono font-extrabold text-sm flex items-center justify-center text-white shrink-0" style="background-color: var(--brand-primary); color: #FFFFFF !important;">04</span>
+                        <h2 class="text-xl font-bold" style="color: var(--text-heading);">Incident Escalation & Law Enforcement</h2>
+                    </div>
+                    <p class="text-sm" style="color: var(--text-body);">
+                        In the event that any potential CSAE violation or security concern is identified:
+                    </p>
+
+                    <!-- STEP 1 & STEP 2 Fix: Single Line Non-wrapping Layout (whitespace-nowrap & min-w-[70px]) -->
+                    <ol class="space-y-3 text-xs">
+                        <li class="flex items-center gap-3 p-3.5 rounded-xl border" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <span class="font-mono font-bold text-xs shrink-0 whitespace-nowrap min-w-[70px]" style="color: var(--brand-primary);">STEP 1</span>
+                            <span style="color: var(--text-body);"><strong style="color: var(--text-heading);">Immediate Intervention:</strong> Associated accounts, access tokens, or reported content will be suspended and purged immediately from system logs.</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3.5 rounded-xl border" style="background-color: var(--code-bg); border-color: var(--border-color);">
+                            <span class="font-mono font-bold text-xs shrink-0 whitespace-nowrap min-w-[70px]" style="color: var(--brand-primary);">STEP 2</span>
+                            <span style="color: var(--text-body);"><strong style="color: var(--text-heading);">Law Enforcement Escalation:</strong> Mandatory escalation to authorities, including the National Center for Missing & Exploited Children (NCMEC) and the National Cyber Crime Reporting Portal (India).</span>
+                        </li>
+                    </ol>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Production Bottom Bar -->
+    <footer class="w-full border-t py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-200" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style="color: var(--text-muted);">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Google Play Certified & CSAE Policy Compliant</span>
+            </div>
+            <div>
+                &copy; 2026 <strong style="color: var(--text-heading);">UK Academe</strong>. All Rights Reserved. Published for <strong style="color: var(--text-heading);">VahanSathi</strong>.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme Switcher Control JS -->
+    <script>
+        const themeBtn = document.getElementById('themeBtn');
+        const themeMenu = document.getElementById('themeMenu');
+        const arrowIcon = document.getElementById('arrowIcon');
+        const activeThemeIcon = document.getElementById('activeThemeIcon');
+        const activeThemeLabel = document.getElementById('activeThemeLabel');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const htmlElement = document.documentElement;
+
+        const svgIcons = {
+            light: `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`,
+            dark: `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`,
+            auto: `<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>`
+        };
+
+        const labels = { light: 'Light Theme', dark: 'Dark Theme', auto: 'System Auto' };
+
+        function applyTheme(mode) {
+            let isDark = mode === 'dark';
+            if (mode === 'auto') {
+                isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+
+            htmlElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+
+            activeThemeIcon.innerHTML = svgIcons[mode];
+            activeThemeLabel.textContent = labels[mode];
+
+            themeOptions.forEach(opt => {
+                const check = opt.querySelector('.check-mark');
+                if (opt.getAttribute('data-value') === mode) {
+                    opt.style.backgroundColor = 'var(--code-bg)';
+                    opt.style.color = 'var(--brand-primary)';
+                    check.classList.remove('hidden');
+                } else {
+                    opt.style.backgroundColor = 'transparent';
+                    opt.style.color = 'var(--text-body)';
+                    check.classList.add('hidden');
+                }
+            });
+        }
+
+        themeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeMenu.classList.toggle('hidden');
+            arrowIcon.classList.toggle('rotate-180');
+        });
+
+        themeOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const val = opt.getAttribute('data-value');
+                localStorage.setItem('vahanSathi_theme', val);
+                applyTheme(val);
+                themeMenu.classList.add('hidden');
+                arrowIcon.classList.remove('rotate-180');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('themeDropdown').contains(e.target)) {
+                themeMenu.classList.add('hidden');
+                arrowIcon.classList.remove('rotate-180');
+            }
+        });
+
+        const saved = localStorage.getItem('vahanSathi_theme') || 'light';
+        applyTheme(saved);
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if ((localStorage.getItem('vahanSathi_theme') || 'light') === 'auto') {
+                applyTheme('auto');
+            }
+        });
+    </script>
+</body>
+</html>
